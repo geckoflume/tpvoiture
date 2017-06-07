@@ -1,5 +1,5 @@
 Dependencies for Project 'boule', Target 'DebugInSitu': (DO NOT MODIFY !)
-F (.\src\main.c)(0x5937A130)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\h-IE:\SI2\template\RTE\Device\STM32F103ZG-IE:\SI2\template\RTE\_DebugInSitu-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\StdPeriph_Driver\inc-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F10X_XL-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+F (.\src\main.c)(0x5937B13D)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\h-IE:\SI2\template\RTE\Device\STM32F103ZG-IE:\SI2\template\RTE\_DebugInSitu-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\StdPeriph_Driver\inc-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F10X_XL-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
 I (C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include\stm32f10x.h)(0x58258CCC)
 I (E:\SI2\template\RTE\_DebugInSitu\RTE_Components.h)(0x591468D0)
 I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\core_cm3.h)(0x58259C4D)
@@ -18,6 +18,7 @@ I (.\h\Board_GLCD.h)(0x59147396)
 I (C:\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x57F65B18)
 I (.\h\Voiture.h)(0x592C2977)
 I (.\h\globales.h)(0x592C29EB)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F65B18)
 F (.\src\bmpTuture.c)(0x592C294A)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\h-IE:\SI2\template\RTE\Device\STM32F103ZG-IE:\SI2\template\RTE\_DebugInSitu-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.2.0\Device\StdPeriph_Driver\inc-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F10X_XL-o .\objects\bmptuture.o --omf_browse .\objects\bmptuture.crf --depend .\objects\bmptuture.d)
 I (.\h\ext_globales.h)(0x592C267E)
 I (.\h\Board_GLCD.h)(0x59147396)
