@@ -1,10 +1,11 @@
 #ifndef __VOITURE_H
 #define __VOITURE_H
 
-struct Voiture
+typedef struct
 {
     int x;
     int y;
-};
+		int vitesse;
+}Voiture;
 
 #endif

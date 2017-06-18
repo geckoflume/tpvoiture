@@ -13,7 +13,7 @@
 
 #include "Voiture.h"
 
-struct Voiture voiture;
-struct Voiture voitureOld;
+Voiture voiture;
+Voiture voitureOld;
 
 #endif

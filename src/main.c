@@ -18,7 +18,8 @@
 #define UIF (1<<0)
 #define SETENA0 *(volatile unsigned long *)0xE000E100
 #define SETENA1 *(volatile unsigned long *)0xE000E104
-#define AFIO_EXTICR4 *(volatile unsigned long *)0x40010011
+#define AFIO_EXTICR1 *(volatile unsigned long *)0x40010008
+#define AFIO_EXTICR4 *(volatile unsigned long *)0x40010014
 
 void cfgTimer1(void){
 	 RCC->APB2ENR |= (1<<11);
@@ -38,14 +39,26 @@ void cfgTimer1(void){
 	 // Configuration de JOYSTICK_UP sur PG15
 	 RCC->APB2ENR |= (1<<8);
 	 temp = GPIOG->CRH & 0x0FFFFFFF;
-	 GPIOG->CRH = temp | 0x00000004;
+	 GPIOG->CRH = temp | 0x40000000;
 	 
 	 // Configuration des ISR sur EXT15 (JOYSTICK_UP)
 	 SETENA1 |= (1<<8);
-	 temp = AFIO_EXTICR4 &0xFFF0;
-	 AFIO_EXTICR4 = temp | 0x6FFF;
-	 EXTI->IMR |= (1<<15); //?
-	 EXTI->RTSR |= (1<<0);
+	 temp = AFIO_EXTICR4 & 0x0FFF;
+	 AFIO_EXTICR4 = temp | 0x6000;
+	 EXTI->IMR |= (1<<15);
+	 EXTI->FTSR |= (1<<15);
+	 
+	 // Configuration de JOYSTICK_DOWN sur PD3
+   RCC->APB2ENR |= (1 << 5); /* Enable GPIOD clock */
+	 temp = GPIOD->CRH & 0xFFFFF0FF;
+	 GPIOD->CRH = temp | 0x00000400;
+
+	 // Configuration des ISR sur EXTI3 (JOY_UP)
+   SETENA0 |= (1 << 9); // bit 9 pour activation IRQ EXTI3
+   temp = AFIO_EXTICR1 & 0x0FFF;
+   AFIO_EXTICR1 = temp | 0x3000; // multiplexeur connectant PG15 sur EXTI15_10
+   EXTI->IMR |= (1 << 3); // interrupt mask
+   EXTI->FTSR |= (1 << 3); //event sur front descendant autorisé
  }
  
  // Traitement de l'interruption sur le timer TIM1
@@ -53,7 +66,7 @@ void cfgTimer1(void){
 	 if(TIM1->SR & UIF)
 	 {
 		 TIM1->SR &= ~UIF;
-		 voiture.y--;
+		 voiture.y+=voiture.vitesse;
 	 }
  }
 
@@ -61,12 +74,19 @@ void cfgTimer1(void){
   void EXTI15_10_IRQHandler(void){
 		if(EXTI->PR & (1<<15)){
 			EXTI->PR |=(1<<15);
-			/*
-			if(vitesse < 100){
-				vitesse +=20;
+			if(voiture.vitesse < 5){
+				voiture.vitesse++;
 			}
-			*/
-			voiture.x+=20;
+		}
+	}
+	
+// Traitement de l'interruption sur PD3
+  void EXTI3_IRQHandler(void){
+		if(EXTI->PR & (1<<3)){
+			EXTI->PR |=(1<<3);
+			if(voiture.vitesse > -1){
+				voiture.vitesse--;
+			}
 		}
 	}
  
@@ -80,6 +100,7 @@ void cfgTimer1(void){
 int main (void) {
 	voiture.x = 100;
 	voiture.y = 0;
+	voiture.vitesse = 0;
 	voitureOld = voiture;
 	voitureOld.y--;
 	
@@ -89,6 +110,7 @@ int main (void) {
 	GLCD_ClearScreen(); 
 	
 	cfgTimer1();
+	cfgGPIO();
 	
 	while(1)
 	{
@@ -96,6 +118,8 @@ int main (void) {
 			clearVoiture(voitureOld.x, voitureOld.y);
 			GLCD_DrawBitmap(voiture.x, voiture.y, wbmpTuture, hbmpTuture, (const unsigned char *)bmpTuture);
 			voitureOld = voiture;
+			GLCD_SetFont(&GLCD_Font_6x8);
+			GLCD_DrawChar(10,0,voiture.vitesse+48);
 		}
 	}
 }

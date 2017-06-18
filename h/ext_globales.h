@@ -17,7 +17,7 @@
 extern GLCD_FONT GLCD_Font_6x8;
 extern GLCD_FONT GLCD_Font_16x24;
 
-extern struct Voiture voiture;
-extern struct Voiture voitureOld;
+extern Voiture voiture;
+extern Voiture voitureOld;
 
 #endif
