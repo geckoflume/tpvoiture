@@ -5,7 +5,8 @@ typedef struct
 {
     int x;
     int y;
-		int vitesse;
+	int vitesse;
+	const unsigned char * sprite;
 }Voiture;
 
 #endif

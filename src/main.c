@@ -37,28 +37,50 @@ void cfgTimer1(void){
 	 RCC->APB2ENR |= (1<<0); //Enable AFIO Clock
 	 
 	 // Configuration de JOYSTICK_UP sur PG15
-	 RCC->APB2ENR |= (1<<8);
+	 RCC->APB2ENR |= (1<<8); //Activation du GPIOG
 	 temp = GPIOG->CRH & 0x0FFFFFFF;
 	 GPIOG->CRH = temp | 0x40000000;
 	 
 	 // Configuration des ISR sur EXT15 (JOYSTICK_UP)
-	 SETENA1 |= (1<<8);
+	 SETENA1 |= (1<<8); // bit 8 pour activation IRQ EXT15
 	 temp = AFIO_EXTICR4 & 0x0FFF;
-	 AFIO_EXTICR4 = temp | 0x6000;
-	 EXTI->IMR |= (1<<15);
-	 EXTI->FTSR |= (1<<15);
+	 AFIO_EXTICR4 = temp | 0x6000; // multiplexeur connectant PG15 sur EXTI15_10
+	 EXTI->IMR |= (1<<15); // interrupt mask
+	 EXTI->FTSR |= (1<<15); //event sur front descendant autorisé
 	 
 	 // Configuration de JOYSTICK_DOWN sur PD3
-   RCC->APB2ENR |= (1 << 5); /* Enable GPIOD clock */
+   	 RCC->APB2ENR |= (1<<5); //Activation du GPIOD
 	 temp = GPIOD->CRH & 0xFFFFF0FF;
 	 GPIOD->CRH = temp | 0x00000400;
 
-	 // Configuration des ISR sur EXTI3 (JOY_UP)
-   SETENA0 |= (1 << 9); // bit 9 pour activation IRQ EXTI3
-   temp = AFIO_EXTICR1 & 0x0FFF;
-   AFIO_EXTICR1 = temp | 0x3000; // multiplexeur connectant PG15 sur EXTI15_10
-   EXTI->IMR |= (1 << 3); // interrupt mask
-   EXTI->FTSR |= (1 << 3); //event sur front descendant autorisé
+	 // Configuration des ISR sur EXTI3 (JOYSTICK_DOWN)
+     SETENA0 |= (1<<9); // bit 9 pour activation IRQ EXTI3
+     temp = AFIO_EXTICR1 & 0x0FFF;
+     AFIO_EXTICR1 = temp | 0x3000; // multiplexeur connectant PG13 sur EXTI3
+     EXTI->IMR |= (1<<3); // interrupt mask
+     EXTI->FTSR |= (1<<3); //event sur front descendant autorisé
+
+	// Configuration de BP_WAKEUP sur PD3
+	RCC->APB2ENR |= (1<<2); //Activation du GPIOD
+	temp = GPIOA->CRL & 0xFFFFFFF0;
+    GPIOA->CRL = temp | 0x00000004;
+
+	// Configuration des ISR sur EXTI0 (BP_WAKEUP)
+	SETENA0 |= (1<<6); // bit 6 pour activation IRQ EXTI0
+	AFIO_EXTICR1 &= 0xFFF0;
+	EXTI->IMR |= (1<<0); // interrupt mask
+	EXTI->RTSR |= (1<<0); //event sur front descendant autorisé
+	
+	// Configuration de BP_TAMPER sur PC13
+	RCC->APB2ENR |= (1<<4); //Activation du GPIOC
+	temp = GPIOC->CRH & 0xFF0FFFFF;
+    GPIOC->CRH = temp | 0x00400000;
+
+	// Configuration des ISR sur EXTI13 (BP_TAMPER)
+	temp = AFIO_EXTICR4 & 0xFF0F;
+	AFIO_EXTICR4 = temp | 0x0020;
+	EXTI->IMR |= (1<<13); // interrupt mask
+	EXTI->FTSR |= (1<<13); //event sur front descendant autorisé
  }
  
  // Traitement de l'interruption sur le timer TIM1
@@ -103,9 +125,10 @@ int main (void) {
 	voiture.vitesse = 0;
 	voitureOld = voiture;
 	voitureOld.y--;
+	voiture.sprite = bmptuturehautpng;
 	
-  GLCD_Initialize();                          /* Initialize graphical LCD display */
-  GLCD_SetBackgroundColor(GLCD_COLOR_BLACK);
+    GLCD_Initialize();                          /* Initialize graphical LCD display */
+    GLCD_SetBackgroundColor(GLCD_COLOR_BLACK);
 	GLCD_SetForegroundColor(GLCD_COLOR_WHITE);
 	GLCD_ClearScreen(); 
 	
@@ -116,7 +139,7 @@ int main (void) {
 	{
 		if(voitureOld.x!=voiture.x || voitureOld.y!=voiture.y){
 			clearVoiture(voitureOld.x, voitureOld.y);
-			GLCD_DrawBitmap(voiture.x, voiture.y, wbmpTuture, hbmpTuture, (const unsigned char *)bmpTuture);
+			GLCD_DrawBitmap(voiture.x, voiture.y, wbmpTuture, hbmpTuture, (const unsigned char *)voiture.sprite);
 			voitureOld = voiture;
 			GLCD_SetFont(&GLCD_Font_6x8);
 			GLCD_DrawChar(10,0,voiture.vitesse+48);

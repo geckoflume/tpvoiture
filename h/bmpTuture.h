@@ -15,7 +15,9 @@
 #define hbmpTuture 18
 #define wbmpTuture 10
 
-extern const unsigned short bmpTuture[wbmpTuture*hbmpTuture];
-
+extern const unsigned short bmptuturehautpng[10*18];
+extern const unsigned short bmptuturebaspng[10*18];
+extern const unsigned short bmptuturedroitepng[18*10];
+extern const unsigned short bmptuturegauchepng[18*10];
 
 #endif
