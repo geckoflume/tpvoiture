@@ -21,6 +21,10 @@
 #define AFIO_EXTICR1 *(volatile unsigned long *)0x40010008
 #define AFIO_EXTICR4 *(volatile unsigned long *)0x40010014
 
+bool bordureTouchee = 0;
+bool desactiverJoystickDown = 0;
+bool desactiverJoystickUp = 0;
+
 void cfgTimer1(void){
 	 RCC->APB2ENR |= (1<<11);
 	 TIM1->PSC=59;
@@ -88,16 +92,38 @@ void cfgTimer1(void){
 	 if(TIM1->SR & UIF)
 	 {
 		 TIM1->SR &= ~UIF;
-		 voiture.y+=voiture.vitesse;
-	 }
+		 if(voiture.vitesse!=0&&(voiture.y<=0||voiture.y==240-18)){
+			 if(voiture.y<0){
+				voiture.y=0;
+			 }
+				bordureTouchee = 0;
+				voiture.vitesse = 0;
+		 }else{
+		 voiture.y-=voiture.vitesse;
+		}
+		 if(voiture.y==240-18){
+			 desactiverJoystickDown=1;
+		 } else if(voiture.y<=0){
+			 desactiverJoystickUp=1;
  }
 
  // Traitement de l'interruption sur PG15
   void EXTI15_10_IRQHandler(void){
 		if(EXTI->PR & (1<<15)){
 			EXTI->PR |=(1<<15);
-			if(voiture.vitesse < 5){
+			if(voiture.vitesse < 5 && desactiverJoystickUp==0){
+				if(bordureTouchee==0){
+					voiture.y-=2;
+					bordureTouchee=1;
+					desactiverJoystickDown=0;
+				}
 				voiture.vitesse++;
+			}
+		}
+		if(EXTI->PR & (1<<13)){
+			EXTI->PR |=(1<<13);
+			if(voiture.vitesse < 5){
+				//voiture.vitesse--;
 			}
 		}
 	}
@@ -106,7 +132,12 @@ void cfgTimer1(void){
   void EXTI3_IRQHandler(void){
 		if(EXTI->PR & (1<<3)){
 			EXTI->PR |=(1<<3);
-			if(voiture.vitesse > -1){
+			if(voiture.vitesse > -1 && desactiverJoystickDown==0){
+				if(bordureTouchee==0){
+					voiture.y+=2;
+					bordureTouchee=1;
+					desactiverJoystickUp=0;
+				}
 				voiture.vitesse--;
 			}
 		}
@@ -120,8 +151,8 @@ void cfgTimer1(void){
   Main Program
  *----------------------------------------------------------------------------*/
 int main (void) {
-	voiture.x = 100;
-	voiture.y = 0;
+	voiture.x = 150;
+	voiture.y = 240-18;
 	voiture.vitesse = 0;
 	voitureOld = voiture;
 	voitureOld.y--;
@@ -134,15 +165,30 @@ int main (void) {
 	
 	cfgTimer1();
 	cfgGPIO();
+	GLCD_SetFont(&GLCD_Font_6x8);
+	
+	GLCD_DrawChar(307,230,' ');
+	GLCD_DrawChar(310,230,(char)48);
 	
 	while(1)
-	{
-		if(voitureOld.x!=voiture.x || voitureOld.y!=voiture.y){
+    {
+		if(voitureOld.x!=voiture.x || voitureOld.y!=voiture.y || voitureOld.vitesse!=voiture.vitesse){
 			clearVoiture(voitureOld.x, voitureOld.y);
 			GLCD_DrawBitmap(voiture.x, voiture.y, wbmpTuture, hbmpTuture, (const unsigned char *)voiture.sprite);
+			
+			if(voitureOld.vitesse!=voiture.vitesse){
+						if(voiture.vitesse+48==47){
+							GLCD_DrawChar(307,230,'-');
+							GLCD_DrawChar(310,230,'1');
+						}else{
+							GLCD_DrawChar(307,230,' ');
+							GLCD_DrawChar(310,230,(char)voiture.vitesse+48);
+						}
+					}
+			
 			voitureOld = voiture;
-			GLCD_SetFont(&GLCD_Font_6x8);
-			GLCD_DrawChar(10,0,voiture.vitesse+48);
+								
+										  
 		}
 	}
 }
