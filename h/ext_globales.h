@@ -1,10 +1,10 @@
 /**
   ******************************************************************************************************************
   * @file    ext_globales.h 
-  * @author  R.NOHE     IUT Informatique La Rochelle
-  * @version v1.1
+  * @author  T.HAYS et F.MORNET     IUT Informatique La Rochelle
+  * @version v1.2
   * @date    11 mai 2017
-  * @modification	rien pour le moment
+  * @modification	ajout des déclarations des voitures
   * @brief   déclarations des variables globales
   ******************************************************************************************************************/
 

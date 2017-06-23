@@ -1,10 +1,10 @@
 /**
   ******************************************************************************************************************
   * @file    bmpTuture.h 
-  * @author  R.NOHE     IUT Informatique La Rochelle
-  * @version v1.2
+  * @author  T.HAYS et F.MORNET     IUT Informatique La Rochelle
+  * @version v1.3
   * @date    11 mai 2017
-  * @modification	rien pour le moment
+  * @modification	ajout des déclarations des différents sprites
   * @brief   declarations pour l'affichage du bitmap de la boule 
   ******************************************************************************************************************/
 

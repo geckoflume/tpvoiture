@@ -1,10 +1,10 @@
 /**
   ******************************************************************************************************************
   * @file    bmpTuture.c 
-  * @author  R.NOHE     IUT Informatique La Rochelle
-  * @version v1.2
+  * @author  T.HAYS et F.MORNET     IUT Informatique La Rochelle
+  * @version v1.3
   * @date    11 mai 2017
-  * @modification
+  * @modification ajout des bitmaps des sprites des voitures
   * @brief   définitions pour la description du bitmap d'une voiture
   ******************************************************************************************************************/
 

@@ -1,8 +1,8 @@
 /**
   ******************************************************************************************************************
   * @file    globales.h 
-  * @author  R.NOHE     IUT Informatique La Rochelle
-  * @version v1.1
+  * @author  T.HAYS et F.MORNETE     IUT Informatique La Rochelle
+  * @version v1.2
   * @date    11 mai 2017
   * @brief   déclarations des variables globales
   ******************************************************************************************************************/

@@ -1,8 +1,8 @@
 /**
   ******************************************************************************************************************
   * @file    main.c 
-  * @author  R.NOHE     IUT Informatique La Rochelle
-  * @version v1.1
+  * @author  T.HAYS et F.MORNET     IUT Informatique La Rochelle
+  * @version v1.3
   * @date    11 mai 2017
   * @modification	rien pour le moment
   * @brief   template pour piloter l'afficheur LCD des cartes MCBSTM32EXL
